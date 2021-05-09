@@ -19,4 +19,12 @@ POST /create-notification
    "message" : "This is the long polling example."  
 }
 ```
-
+## SSE
+POST /create-notification
+```
+{
+   "type": "sse",
+   "forClientId": "S739zi9178cxWKDFqz1ji",
+   "message" : "This is the sse example."  
+}
+```

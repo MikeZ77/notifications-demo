@@ -32,6 +32,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setNotifications(prevState => [...prevState, data.message])
+        setUnreadCount(undreadCount => undreadCount + 1)
         callLongPolling(id)
       })
     }
@@ -47,8 +48,8 @@ function App() {
       const source = new EventSource(`http://localhost:8080/sse?clientId=${id}`)
 
       source.onmessage = (event) => {
-        console.log("Hello")
-        console.log(event.data)
+        setNotifications(prevState => [...prevState, JSON.parse(event.data)])
+        setUnreadCount(undreadCount => undreadCount + 1)
       }
   
       return () => source.close()
