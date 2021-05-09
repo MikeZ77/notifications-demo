@@ -16,13 +16,11 @@ const eventEmitter = new events.EventEmitter()
 app.get('/long-polling', (req, res) => {
 
   const clientId = req.query.clientId
-  console.log(clientId)
-  eventEmitter.on('notification-long-polling', (forClientId, message) => {
+  eventEmitter.once('notification-long-polling', (forClientId, message) => {
     if (forClientId === clientId) {
       res.send({ message })
     }
   })
-  
 })
 
 app.post('/create-notification', (req, res) => {

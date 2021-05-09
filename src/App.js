@@ -28,11 +28,11 @@ function App() {
   useEffect(() => {
 
     const callLongPolling = (id) => {
-      console.log(id)
       fetch(`http://localhost:8080/long-polling?clientId=${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.message)
+        setNotifications(prevState => [...prevState, data.message])
+        callLongPolling(id)
       })
     }
 
@@ -71,15 +71,19 @@ function App() {
               }}
             >
               <List component="nav" style={{ padding: '0' }}>
-                <ListItem button>
-                  <ListItemText primary="Testingglmbldfmbldfbm  dbfm ;fdbfd bfdbdbfd" />
-                </ListItem>
-                <Divider />
-                <ListItem button divider>
-                  <ListItemText primary="Drafts" />
-                </ListItem>
+                {
+                  notifications.map((message, i) => {
+                    return(
+                      <Box key={i}>
+                        <ListItem button>
+                          <ListItemText primary={message}/>
+                        </ListItem>
+                        <Divider />
+                      </Box>
+                    )
+                  })  
+                }
               </List>
-            
             </Popover>
 
             <Box component='div' style={{ margin: 'auto' }}>
