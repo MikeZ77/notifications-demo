@@ -25,8 +25,8 @@ function App() {
 
   useEffect(() => { setId(nanoid()) }, [])
 
+  // Long Polling  
   useEffect(() => {
-
     const callLongPolling = (id) => {
       fetch(`http://localhost:8080/long-polling?clientId=${id}`)
       .then((res) => res.json())
@@ -39,8 +39,22 @@ function App() {
     if (id) {
       callLongPolling(id)
     } 
-
   }, [id])
+
+  // SSE
+  useEffect(() => {
+    if (id) {
+      const source = new EventSource(`http://localhost:8080/sse?clientId=${id}`)
+
+      source.onmessage = (event) => {
+        console.log("Hello")
+        console.log(event.data)
+      }
+  
+      return () => source.close()
+    }
+  }, [id])
+
 
   const resetNotifications = () => {
     setUnreadCount(0)
