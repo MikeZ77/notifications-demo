@@ -28,3 +28,12 @@ POST /create-notification
    "message" : "This is the sse example."  
 }
 ```
+## Web Socket
+POST /create-notification
+```
+{
+   "type": "socket",
+   "forClientId": "S739zi9178cxWKDFqz1ji",
+   "message" : "This is the web socket example."  
+}
+```

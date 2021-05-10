@@ -46,10 +46,10 @@ function App() {
     if (id) {
       const source = new EventSource(`http://localhost:8080/sse?clientId=${id}`)
 
-      source.onmessage = (event) => {
+      source.addEventListener('notification', (event) => {
         setNotifications(prevState => [...prevState, JSON.parse(event.data)])
         setUnreadCount(undreadCount => undreadCount + 1)
-      }
+      })
   
       return () => source.close()
     }
@@ -63,11 +63,15 @@ function App() {
 
       ws.onopen = () => {
         console.log('WebSocket Client Connected');
-      };
+      }
+
+      ws.onmessage = (message) => {
+        setNotifications(prevState => [...prevState, message.data])
+        setUnreadCount(undreadCount => undreadCount + 1)
+      }
+
+      return () => ws.close()
     }
-
-
-
   }, [id])
 
 

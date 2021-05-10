@@ -30,21 +30,24 @@ app.get('/sse', sse.setupSeeConnection, (req, res) => {
   eventEmitter.on('sse', (forClientId, message) => {
     const clientId = req.query.clientId
     if (clientId === forClientId) {
-      sse.connectionPool[forClientId].write(`data: ${JSON.stringify(message)}\n\n`)
+      sse.connectionPool[forClientId].write(`event: notification \n\n data: ${JSON.stringify(message)}\n\n`)
     }
   })
 })
 
 wss.on('connection', function connection(ws, req) {
-  const params = new URLSearchParams(req.url.slice(1, req.url.length));
+  const params = new URLSearchParams(req.url.slice(1, req.url.length))
   const clientId = params.get('clientId')
-  console.log(`Client ${clientId} has connected through websocket!`);
-
+  console.log(`Client ${clientId} has connected through websocket!`)
+  eventEmitter.on('socket', (forClientId, message) => {
+    if (clientId === forClientId) {
+      ws.send(message)
+    }
+  })
 })
 
 app.post('/create-notification', (req, res) => {
-  console.log(req.body);
-
+  
   const { type, forClientId, message } = req.body
 
   switch(type) {
@@ -53,11 +56,11 @@ app.post('/create-notification', (req, res) => {
       break
     case 'sse':
       eventEmitter.emit('sse',forClientId, message)
+    case 'socket':
+      eventEmitter.emit('socket',forClientId, message)
     default:
       break
-    
   }
-
   res.send()
 })
 
