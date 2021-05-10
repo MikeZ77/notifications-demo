@@ -2,8 +2,10 @@ const express = require('express')
 const events = require('events')
 const cors = require('cors')
 
+const WebSocket = require('ws')
 const sse = require('./middleware/sse')
 
+const wss = new WebSocket.Server({ port: 8081 });
 const app = express()
 const port = 8080
 
@@ -31,6 +33,13 @@ app.get('/sse', sse.setupSeeConnection, (req, res) => {
       sse.connectionPool[forClientId].write(`data: ${JSON.stringify(message)}\n\n`)
     }
   })
+})
+
+wss.on('connection', function connection(ws, req) {
+  const params = new URLSearchParams(req.url.slice(1, req.url.length));
+  const clientId = params.get('clientId')
+  console.log(`Client ${clientId} has connected through websocket!`);
+
 })
 
 app.post('/create-notification', (req, res) => {

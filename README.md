@@ -1,6 +1,6 @@
 # Web socket, SSE, and Long Polling Demo
 
-The application for this demo is a simple notification system using React and a Node.js/Express server. Use the unique client id to use in the request.
+The application for this demo is a simple notification system using React and a Node.js/Express server. Use the unique client id in the request.
 
 ## Start the App
 ```

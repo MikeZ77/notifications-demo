@@ -12,7 +12,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { nanoid } from 'nanoid'
 
-
 function App() {
 
   const [undreadCount, setUnreadCount] = useState(0)
@@ -54,6 +53,21 @@ function App() {
   
       return () => source.close()
     }
+  }, [id])
+
+  // Web Socket
+  useEffect(() => {
+
+    if (id) {
+      const ws = new WebSocket(`ws:localhost:8081/?clientId=${id}`)
+
+      ws.onopen = () => {
+        console.log('WebSocket Client Connected');
+      };
+    }
+
+
+
   }, [id])
 
 
